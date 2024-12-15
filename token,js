@@ -1,0 +1,98 @@
+export function writeLineToFile(filePath, line) {
+    try {
+        fs.appendFileSync(filePath, line + '\n', 'utf-8')
+    } catch (error) {
+        console.error('Error appending to the file:', error.message)
+    }
+}
+
+export function getBalance(balance, decimal) {
+    return parseFloat((parseInt(balance) / 10 ** decimal).toFixed(6))
+}
+
+export function timestampToDate(timestamp) {
+    return new Date(parseInt(timestamp) * 1000)
+}
+
+export function compareVersions(version1, version2) {
+    const parts1 = version1.split('.').map(Number)
+    const parts2 = version2.split('.').map(Number)
+
+    for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
+        const part1 = parts1[i] || 0
+        const part2 = parts2[i] || 0
+
+        if (part1 < part2) return -1
+        if (part1 > part2) return 1
+    }
+
+    return 0
+}
+
+Date.prototype.getWeek = function (dowOffset) {
+    /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
+
+    dowOffset = typeof (dowOffset) == 'number' ? dowOffset : 0 //default dowOffset to zero
+    var newYear = new Date(this.getFullYear(), 0, 1)
+    var day = newYear.getDay() - dowOffset //the day of week the year begins on
+    day = (day >= 0 ? day : day + 7)
+    var daynum = Math.floor((this.getTime() - newYear.getTime() -
+        (this.getTimezoneOffset() - newYear.getTimezoneOffset()) * 60000) / 86400000) + 1
+    var weeknum
+    //if the year starts before the middle of a week
+    if (day < 4) {
+        weeknum = Math.floor((daynum + day - 1) / 7) + 1
+        if (weeknum > 52) {
+            let nYear = new Date(this.getFullYear() + 1, 0, 1)
+            let nday = nYear.getDay() - dowOffset
+            nday = nday >= 0 ? nday : nday + 7
+            /*if the next year starts before the middle of
+              the week, it is week #1 of that year*/
+            weeknum = nday < 4 ? 1 : 53
+        }
+    }
+    else {
+        weeknum = Math.floor((daynum + day - 1) / 7)
+    }
+    return weeknum
+}
+
+export function getNativeToken(network) {
+    let token = 'ETH'
+    switch (network) {
+        case 'Polygon':
+            token = 'MATIC'
+            break
+        case 'polygon':
+            token = 'MATIC'
+            break
+        case 'BSC':
+            token = 'BNB'
+            break
+        case 'opBNB':
+            token = 'BNB'
+            break
+        case 'Avalanche':
+            token = 'AVAX'
+            break
+        case 'Core':
+            token = 'CORE'
+            break
+        case 'Celo':
+            token = 'CELO'
+            break
+        case 'Klaytn':
+            token = 'KLAY'
+            break
+        case 'Fantom':
+            token = 'FTM'
+            break
+        case 'Moonbeam':
+            token = 'GLMR'
+            break
+        case 'Moonriver':
+            token = 'MOVR'
+            break
+    }
+
+    return token
